@@ -14,7 +14,6 @@ Load these files on demand — never preload all at once.
 | Resource                    | Load when                                                      | Path                                                               |
 | --------------------------- | -------------------------------------------------------------- | ------------------------------------------------------------------ |
 | Report & evidence standards | Step 3 — presenting findings · Step 6 item 1 — console summary | `~/.claude/skills/ws-a11y/references/report-standards.md`          |
-| CLI flags reference         | Before running audit — need non-default flags                  | `~/.claude/skills/ws-a11y/references/cli-reference.md`             |
 | Quality gates               | Any phase boundary — verifying gate pass/fail                  | `~/.claude/skills/ws-a11y/references/quality-gates.md`             |
 | Troubleshooting             | Any script failure                                             | `~/.claude/skills/ws-a11y/references/troubleshooting.md`           |
 
