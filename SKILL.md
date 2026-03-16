@@ -339,8 +339,8 @@ The source scanner checks your **entire codebase** for issues axe-core cannot de
 
 If **Yes**, run in order:
 ```bash
-node $SKILL_DIR/scripts/engine/source-scanner.mjs --project-dir <path> [--framework <val>]
-node $SKILL_DIR/scripts/reports/builders/md.mjs --output <REMEDIATION_PATH> --base-url <URL>
+node $SKILL_DIR/scripts/source-scanner.mjs --project-dir <path> [--framework <val>]
+node $SKILL_DIR/scripts/md.mjs --output <REMEDIATION_PATH> --base-url <URL>
 ```
 
 Present new findings from "Source Code Pattern Findings" section, grouped by severity.

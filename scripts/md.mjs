@@ -4,8 +4,8 @@
  * Reads the findings payload from .audit/ and (re)generates the remediation.md guide.
  * Called after source-scanner.mjs in SKILL.md Step 6.6 to include pattern findings.
  *
- * Usage (from SKILL.md Step 6.6):
- *   node $SKILL_DIR/scripts/reports/builders/md.mjs --output <REMEDIATION_PATH> --base-url <URL>
+ * Usage (from SKILL.md Step 3):
+ *   node $SKILL_DIR/scripts/md.mjs --output <REMEDIATION_PATH> --base-url <URL>
  */
 
 import path from "node:path";
@@ -13,7 +13,7 @@ import { fileURLToPath } from "node:url";
 import fs from "node:fs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const SKILL_ROOT = path.join(__dirname, "..", "..", "..");
+const SKILL_ROOT = path.join(__dirname, "..");
 const AUDIT_DIR = path.join(SKILL_ROOT, ".audit");
 
 const log = {

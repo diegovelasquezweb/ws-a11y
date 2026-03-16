@@ -3,8 +3,8 @@
  * @description CLI wrapper for @diegovelasquezweb/a11y-engine source pattern scanner.
  * Scans a project's source code for accessibility issues not detectable by axe-core at runtime.
  *
- * Usage (from SKILL.md Step 6.6):
- *   node $SKILL_DIR/scripts/engine/source-scanner.mjs --project-dir <path> [--framework <val>]
+ * Usage (from SKILL.md Step 3):
+ *   node $SKILL_DIR/scripts/source-scanner.mjs --project-dir <path> [--framework <val>]
  */
 
 import path from "node:path";
@@ -12,7 +12,7 @@ import { fileURLToPath } from "node:url";
 import fs from "node:fs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const SKILL_ROOT = path.join(__dirname, "..", "..");
+const SKILL_ROOT = path.join(__dirname, "..");
 const AUDIT_DIR = path.join(SKILL_ROOT, ".audit");
 
 const log = {
