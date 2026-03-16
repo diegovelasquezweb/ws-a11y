@@ -26,5 +26,5 @@ ws-a11y never modifies code. All fixes are delegated to `ws-dev/frontend` with s
 
 ## Integration with ws-dev/frontend
 
-ws-a11y delegates all fixes to `ws-dev/frontend` via `Task()`. When `--project-dir` is provided, the remediation guide is written to `.ws-session/a11y-remediation.md` inside the project — the same directory all ws-* skills use for session state. `ws-dev/frontend` reads it from there to understand what to fix, implements the changes, and returns results to ws-a11y for re-audit.
+ws-a11y delegates all fixes to `ws-dev/frontend` via `Task()`. The remediation guide is written to `.ws-session/a11y-remediation.md` — the same directory all ws-* skills use for session state. `ws-dev/frontend` reads it from there to understand what to fix, implements the changes, and returns results to ws-a11y for re-audit.
 

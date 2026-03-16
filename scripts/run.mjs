@@ -68,7 +68,14 @@ function parseArgs(argv) {
   const baseUrl = getArgValue("base-url");
   if (!baseUrl) {
     log.error("Missing required argument: --base-url");
-    log.info("Usage: node scripts/run.mjs --base-url <url> [options]");
+    log.info("Usage: node scripts/run.mjs --base-url <url> --project-dir <path> [options]");
+    process.exit(1);
+  }
+
+  const projectDir = getArgValue("project-dir");
+  if (!projectDir) {
+    log.error("Missing required argument: --project-dir");
+    log.info("Usage: node scripts/run.mjs --base-url <url> --project-dir <path> [options]");
     process.exit(1);
   }
 
@@ -184,16 +191,10 @@ async function main() {
     patternFindings: payload.patternFindings || null,
   });
 
-  // Write remediation.md to .ws-session/ in the project (for ws-dev/frontend to consume).
-  // Falls back to .audit/ inside the skill if no --project-dir was provided.
-  let remediationPath;
-  if (args.projectDir) {
-    const wsSessionDir = path.join(path.resolve(args.projectDir), ".ws-session");
-    fs.mkdirSync(wsSessionDir, { recursive: true });
-    remediationPath = path.join(wsSessionDir, "a11y-remediation.md");
-  } else {
-    remediationPath = path.join(AUDIT_DIR, "remediation.md");
-  }
+  // Write remediation.md to .ws-session/ in the project (for ws-dev/frontend to consume)
+  const wsSessionDir = path.join(path.resolve(args.projectDir), ".ws-session");
+  fs.mkdirSync(wsSessionDir, { recursive: true });
+  const remediationPath = path.join(wsSessionDir, "a11y-remediation.md");
   fs.writeFileSync(remediationPath, markdown, "utf-8");
   console.log(`REMEDIATION_PATH=${remediationPath}`);
 
