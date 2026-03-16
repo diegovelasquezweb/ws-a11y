@@ -4,7 +4,7 @@
   "description": "WCAG 2.2 AA accessibility audit skill for AI coding agents — powered by @diegovelasquezweb/a11y-engine",
   "type": "module",
   "scripts": {
-    "ws-a11y": "node scripts/audit.mjs",
+    "ws-a11y": "node scripts/run.mjs",
     "test": "vitest run",
     "postinstall": "npx playwright install chromium",
     "sync": "[ -d ~/.claude/skills/ws-a11y ] && rsync -av --delete --exclude='.git/' --exclude='.github/' --exclude='.audit/' --exclude='node_modules/' . ~/.claude/skills/ws-a11y/ ; [ -d ~/.gemini/skills/ws-a11y ] && rsync -av --delete --exclude='.git/' --exclude='.github/' --exclude='.audit/' --exclude='node_modules/' . ~/.gemini/skills/ws-a11y/ ; [ -d ~/.gemini/antigravity/skills/ws-a11y ] && rsync -av --delete --exclude='.git/' --exclude='.github/' --exclude='.audit/' --exclude='node_modules/' . ~/.gemini/antigravity/skills/ws-a11y/ ; [ -d ~/.cursor/skills/ws-a11y ] && rsync -av --delete --exclude='.git/' --exclude='.github/' --exclude='.audit/' --exclude='node_modules/' . ~/.cursor/skills/ws-a11y/ ; [ -d ~/.codex/skills/ws-a11y ] && rsync -av --delete --exclude='.git/' --exclude='.github/' --exclude='.audit/' --exclude='node_modules/' . ~/.codex/skills/ws-a11y/ ; [ -d ~/.codeium/windsurf/skills/ws-a11y ] && rsync -av --delete --exclude='.git/' --exclude='.github/' --exclude='.audit/' --exclude='node_modules/' . ~/.codeium/windsurf/skills/ws-a11y/ ; true"

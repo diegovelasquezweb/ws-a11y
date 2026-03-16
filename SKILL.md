@@ -101,13 +101,13 @@ Set `SKILL_DIR` to `~/.claude/skills/ws-a11y`. Run:
 
 ```bash
 # Default (sitemap or 10-page crawl)
-node $SKILL_DIR/scripts/audit.mjs --mode standalone --base-url <URL>
+node $SKILL_DIR/scripts/run.mjs --mode standalone --base-url <URL>
 
 # Single page
-node $SKILL_DIR/scripts/audit.mjs --mode standalone --base-url <URL> --max-routes 1
+node $SKILL_DIR/scripts/run.mjs --mode standalone --base-url <URL> --max-routes 1
 
 # All pages or custom count
-node $SKILL_DIR/scripts/audit.mjs --mode standalone --base-url <URL> --max-routes <N>
+node $SKILL_DIR/scripts/run.mjs --mode standalone --base-url <URL> --max-routes <N>
 ```
 
 Always pass `--project-dir <path>` for local projects. Always include `--skip-patterns` — source code pattern scanning is offered separately in Step 6. If you can identify the stack, also pass `--framework <value>`.
@@ -292,7 +292,7 @@ This step is **mandatory** — always run it after fixes, no exceptions. If no f
 **Immediately run the script — do not output any message before running it:**
 
 ```bash
-node $SKILL_DIR/scripts/audit.mjs --mode standalone --base-url <URL> --max-routes <N> --skip-patterns --affected-only
+node $SKILL_DIR/scripts/run.mjs --mode standalone --base-url <URL> --max-routes <N> --skip-patterns --affected-only
 ```
 
 > **Flag parity is mandatory.** Use the exact same flags as Step 2 plus `--affected-only`.

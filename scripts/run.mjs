@@ -1,7 +1,6 @@
 /**
- * @file audit.mjs
- * @description Orchestrator for the ws-a11y accessibility audit pipeline.
- * Delegates all scanning, analysis, and report generation to @diegovelasquezweb/a11y-engine.
+ * @file run.mjs
+ * @description Entry point for the ws-a11y skill. Parses CLI args and delegates to @diegovelasquezweb/a11y-engine.
  */
 
 import path from "node:path";
