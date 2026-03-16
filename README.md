@@ -31,10 +31,4 @@ ws-a11y never modifies code. All fixes are delegated to `ws-dev/frontend` with s
 | Format | When |
 | :----- | :--- |
 | Remediation guide (`.md`) | Always — generated after every audit |
-| HTML dashboard (`.html`) | On request — interactive findings with severity filters |
-| PDF compliance report (`.pdf`) | On request — formal document for stakeholders |
-| Manual checklist (`.html`) | On request — WCAG checks that automation cannot detect |
 
-## Full Documentation
-
-See the [WS Coding Workflows README](https://github.com/Wondersauce/claude-code-plugin#ws-a11y) for scope classification, pass/fail thresholds, finding types, and orchestrator integration.

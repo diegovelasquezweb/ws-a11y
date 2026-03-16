@@ -48,10 +48,6 @@ Execution & Emulation:
   --wait-ms <num>         Time to wait after page load (default: 2000).
   --timeout-ms <num>      Network timeout (default: 30000).
 
-Reports:
-  --with-reports          Also generate HTML, PDF and checklist reports.
-  --output <path>         (--with-reports) Output path for the HTML report.
-
   -h, --help              Show this help.
 `);
 }
@@ -106,8 +102,6 @@ function parseArgs(argv) {
     affectedOnly: argv.includes("--affected-only"),
     waitMs: getArgValue("wait-ms") ? parseInt(getArgValue("wait-ms"), 10) : undefined,
     timeoutMs: getArgValue("timeout-ms") ? parseInt(getArgValue("timeout-ms"), 10) : undefined,
-    withReports: argv.includes("--with-reports"),
-    output: getArgValue("output") || undefined,
   };
 }
 
@@ -164,7 +158,7 @@ async function main() {
 
   log.info("Starting accessibility audit pipeline...");
 
-  const { runAudit, getRemediationGuide, getHTMLReport, getPDFReport, getChecklist } =
+  const { runAudit, getRemediationGuide } =
     await import("@diegovelasquezweb/a11y-engine");
 
   // Run full audit (crawl + scan + analyze + optional source patterns)
@@ -207,40 +201,6 @@ async function main() {
   const remediationPath = path.join(AUDIT_DIR, "remediation.md");
   fs.writeFileSync(remediationPath, markdown, "utf-8");
   console.log(`REMEDIATION_PATH=${remediationPath}`);
-
-  // Optional: generate visual reports
-  if (args.withReports) {
-    if (!args.output) {
-      log.error("--with-reports requires --output <path> for the HTML report location.");
-      process.exit(1);
-    }
-    const absoluteOutput = path.isAbsolute(args.output) ? args.output : path.resolve(args.output);
-    const pdfOutput = absoluteOutput.replace(/\.html$/, ".pdf");
-    const checklistOutput = path.join(path.dirname(absoluteOutput), "checklist.html");
-
-    log.info("Generating HTML report...");
-    const { html: htmlReport } = await getHTMLReport(payload, {
-      baseUrl: args.baseUrl,
-      target: args.target,
-      screenshotsDir,
-    });
-    fs.mkdirSync(path.dirname(absoluteOutput), { recursive: true });
-    fs.writeFileSync(absoluteOutput, htmlReport, "utf-8");
-
-    log.info("Generating PDF report...");
-    const { buffer: pdfBuffer } = await getPDFReport(payload, {
-      baseUrl: args.baseUrl,
-      target: args.target,
-    });
-    fs.writeFileSync(pdfOutput, pdfBuffer);
-
-    log.info("Generating checklist...");
-    const { html: checklistHtml } = await getChecklist({ baseUrl: args.baseUrl });
-    fs.writeFileSync(checklistOutput, checklistHtml, "utf-8");
-
-    console.log(`REPORT_PATH=${absoluteOutput}`);
-    console.log(`CHECKLIST_PATH=${checklistOutput}`);
-  }
 
   log.success("Audit complete.");
 }

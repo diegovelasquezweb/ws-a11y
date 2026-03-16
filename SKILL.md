@@ -329,46 +329,7 @@ Repeat fix+re-audit up to **3 cycles total**. If issues persist after 3 cycles, 
 
 2. **Passed Criteria**: read the `## Passed WCAG 2.2 Criteria` section from the remediation guide and present it as-is.
 
-3. Ask about reports:
-
-`[QUESTION]` **Would you like a visual report?**
-
-1. **Yes**
-2. **No thanks**
-
-If **No thanks**: skip to item 6.
-
-If **Yes**, ask which format:
-
-`[QUESTION]` **Which report?**
-
-1. **WCAG 2.2 AA Audit Dashboard** — interactive HTML with full findings, severity filters, and fix guidance
-2. **WCAG 2.2 AA Compliance Report** — formal PDF for stakeholders, clients, and legal review
-3. **Both**
-4. **Back** — change your report preference
-
-4. Ask save location (skip if path already set earlier in this session):
-
-`[QUESTION]` **Where should I save the reports?**
-
-1. **Desktop** — `~/Desktop/`
-2. **Documents** — `~/Documents/`
-3. **Custom path** — tell me the exact folder path
-4. **Back** — change the report format
-
-5. **Execute** the commands — do not describe them, run them:
-
-```bash
-# HTML (if HTML or Both selected)
-node $SKILL_DIR/scripts/reports/builders/html.mjs --output <path>/report.html --base-url <URL>
-
-# PDF (if PDF or Both selected)
-node $SKILL_DIR/scripts/reports/builders/pdf.mjs --output <path>/report.pdf --base-url <URL>
-```
-
-Apply the file-open rule. **Then immediately continue to item 6 — do not wait for user input.**
-
-6. If `--project-dir` was provided, ask:
+3. If `--project-dir` was provided, ask:
 
 `[QUESTION]` **Scan source code patterns?**
 
@@ -395,7 +356,7 @@ If findings found, ask:
 
 If **Fix all** or **Let me pick**: delegate to `Task(ws-dev/frontend)` with pattern findings as `iteration_findings`. After fixes applied, re-run source scanner to verify and present delta.
 
-7. Output the manual testing reminder and checklist offer — **only if at least one fix was applied during this session**:
+4. Output the manual testing reminder — **only if at least one fix was applied during this session**:
 
 `[MESSAGE]` Automated tools cannot catch every accessibility barrier. The following are the most critical checks that require human judgment — please verify them manually.
 
@@ -405,28 +366,7 @@ If **Fix all** or **Let me pick**: delegate to `Task(ws-dev/frontend)` with patt
 - [ ] **Motion & timing** — `prefers-reduced-motion` is respected; no content flashes >3×/sec; auto-playing content has a pause control.
 - [ ] **Forms & errors** — Error messages give specific correction guidance; financial/legal submissions have a confirmation step.
 
-`[QUESTION]` **Would you like to export the manual testing checklist?**
-
-1. **Yes** — generate `checklist.html` with all checks and step-by-step instructions
-2. **No thanks**
-
-If **Yes**: reuse save path from item 4 if already set. If no path set yet, ask:
-
-`[QUESTION]` **Where should I save the checklist?**
-
-1. **Desktop** — `~/Desktop/`
-2. **Documents** — `~/Documents/`
-3. **Custom path** — tell me the exact folder path
-4. **Back** — go back to the checklist export question
-
-Then:
-```bash
-node $SKILL_DIR/scripts/reports/builders/checklist.mjs --output <path>/checklist.html --base-url <URL>
-```
-
-Apply the file-open rule. **Then immediately continue to item 8.**
-
-8. Output the closing message and follow-up question in the same response. If the user skipped all fixes, skip the `[MESSAGE]` and go directly to the `[QUESTION]`.
+5. Output the closing message and follow-up question in the same response. If the user skipped all fixes, skip the `[MESSAGE]` and go directly to the `[QUESTION]`.
 
 `[MESSAGE]` Great work! By investing in accessibility, you're making your site usable for everyone — including people who rely on screen readers, keyboard navigation, and assistive technology. That commitment matters and sets your project apart. Accessibility isn't a one-time task, so consider scheduling periodic re-audits as your site evolves. Keep it up!
 
@@ -434,6 +374,7 @@ Apply the file-open rule. **Then immediately continue to item 8.**
 
 1. **Yes** — start a new audit
 2. **No, goodbye**
+
 
 If **Yes**: discard all session state and restart from Step 1. If **No, goodbye**: the workflow is complete.
 
