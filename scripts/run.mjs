@@ -1,8 +1,3 @@
-/**
- * @file run.mjs
- * @description Entry point for the ws-a11y skill. Parses CLI args and delegates to @diegovelasquezweb/a11y-engine.
- */
-
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import fs from "node:fs";
@@ -19,44 +14,7 @@ const log = {
   error: (msg) => console.error(`\x1b[31m[ERROR]\x1b[0m ${msg}`),
 };
 
-function printUsage() {
-  log.info(`Usage:
-  node scripts/run.mjs --base-url <url> [options]
-
-Targeting & Scope:
-  --base-url <url>        (Required) The target website to audit.
-  --max-routes <num>      Max routes to discover and scan (default: 10).
-  --crawl-depth <num>     How deep to follow links during discovery (1-3, default: 2).
-  --routes <csv>          Custom list of paths to scan.
-  --project-dir <path>    Path to the audited project (for stack auto-detection).
-
-Audit Intelligence:
-  --target <text>         Compliance target label (default: "WCAG 2.2 AA").
-  --only-rule <id>        Only check for this specific rule ID.
-  --ignore-findings <csv> Ignore specific rule IDs.
-  --exclude-selectors <csv> Exclude CSS selectors from scan.
-
-Execution & Emulation:
-  --color-scheme <val>    Emulate color scheme: "light" or "dark".
-  --wait-until <val>      Page load strategy: domcontentloaded|load|networkidle (default: domcontentloaded).
-  --framework <val>       Override auto-detected stack (nextjs|gatsby|react|nuxt|vue|angular|astro|svelte|shopify|wordpress|drupal).
-  --viewport <WxH>        Viewport dimensions as WIDTHxHEIGHT (e.g., 375x812 for mobile).
-  --headed                Run browser in visible mode (overrides headless).
-  --skip-patterns         Skip source code pattern scanning even if --project-dir is set.
-  --affected-only         Re-scan only routes that had violations in the previous scan.
-  --wait-ms <num>         Time to wait after page load (default: 2000).
-  --timeout-ms <num>      Network timeout (default: 30000).
-
-  -h, --help              Show this help.
-`);
-}
-
 function parseArgs(argv) {
-  if (argv.includes("--help") || argv.includes("-h")) {
-    printUsage();
-    process.exit(0);
-  }
-
   function getArgValue(name) {
     const entry = argv.find((a) => a.startsWith(`--${name}=`));
     if (entry) return entry.split("=")[1];
@@ -68,14 +26,12 @@ function parseArgs(argv) {
   const baseUrl = getArgValue("base-url");
   if (!baseUrl) {
     log.error("Missing required argument: --base-url");
-    log.info("Usage: node scripts/run.mjs --base-url <url> --project-dir <path> [options]");
     process.exit(1);
   }
 
   const projectDir = getArgValue("project-dir");
   if (!projectDir) {
     log.error("Missing required argument: --project-dir");
-    log.info("Usage: node scripts/run.mjs --base-url <url> --project-dir <path> [options]");
     process.exit(1);
   }
 
@@ -88,13 +44,17 @@ function parseArgs(argv) {
 
   const ignoreFindings = getArgValue("ignore-findings");
   const excludeSelectors = getArgValue("exclude-selectors");
+  const maxRoutes = getArgValue("max-routes");
+  const crawlDepth = getArgValue("crawl-depth");
+  const waitMs = getArgValue("wait-ms");
+  const timeoutMs = getArgValue("timeout-ms");
 
   return {
     baseUrl,
-    maxRoutes: getArgValue("max-routes") ? parseInt(getArgValue("max-routes"), 10) : 10,
-    crawlDepth: getArgValue("crawl-depth") ? parseInt(getArgValue("crawl-depth"), 10) : 2,
+    maxRoutes: maxRoutes ? parseInt(maxRoutes, 10) : 10,
+    crawlDepth: crawlDepth ? parseInt(crawlDepth, 10) : 2,
     routes: getArgValue("routes") || undefined,
-    projectDir: getArgValue("project-dir") || undefined,
+    projectDir,
     target: getArgValue("target") || "WCAG 2.2 AA",
     onlyRule: getArgValue("only-rule") || undefined,
     ignoreFindings: ignoreFindings ? ignoreFindings.split(",").map((v) => v.trim()) : undefined,
@@ -106,15 +66,14 @@ function parseArgs(argv) {
     headless: !argv.includes("--headed"),
     skipPatterns: argv.includes("--skip-patterns"),
     affectedOnly: argv.includes("--affected-only"),
-    waitMs: getArgValue("wait-ms") ? parseInt(getArgValue("wait-ms"), 10) : undefined,
-    timeoutMs: getArgValue("timeout-ms") ? parseInt(getArgValue("timeout-ms"), 10) : undefined,
+    waitMs: waitMs ? parseInt(waitMs, 10) : undefined,
+    timeoutMs: timeoutMs ? parseInt(timeoutMs, 10) : undefined,
   };
 }
 
 async function main() {
   const args = parseArgs(process.argv.slice(2));
 
-  // Ensure engine is installed
   const nodeModulesPath = path.join(SKILL_ROOT, "node_modules");
   if (!fs.existsSync(nodeModulesPath)) {
     log.info("First run detected — installing skill dependencies (one-time setup)...");
@@ -128,7 +87,6 @@ async function main() {
 
   fs.mkdirSync(AUDIT_DIR, { recursive: true });
 
-  // Resolve --affected-only: narrow routes to those with previous violations
   let effectiveRoutes = args.routes;
   if (args.affectedOnly && !args.routes) {
     const prevScanPath = path.join(AUDIT_DIR, "a11y-findings.json");
@@ -155,7 +113,6 @@ async function main() {
   const { runAudit, getRemediationGuide } =
     await import("@diegovelasquezweb/a11y-engine");
 
-  // Run full audit (crawl + scan + analyze + optional source patterns)
   const payload = await runAudit({
     baseUrl: args.baseUrl,
     maxRoutes: args.maxRoutes,
@@ -180,18 +137,15 @@ async function main() {
     },
   });
 
-  // Persist findings JSON only for --affected-only re-scans
   const findingsPath = path.join(AUDIT_DIR, "a11y-findings.json");
   fs.writeFileSync(findingsPath, JSON.stringify(payload, null, 2), "utf-8");
 
-  // Generate remediation guide
   const { markdown } = await getRemediationGuide(payload, {
     baseUrl: args.baseUrl,
     target: args.target,
     patternFindings: payload.patternFindings || null,
   });
 
-  // Write remediation.md to .ws-session/ in the project (for ws-dev/frontend to consume)
   const wsSessionDir = path.join(path.resolve(args.projectDir), ".ws-session");
   fs.mkdirSync(wsSessionDir, { recursive: true });
   const remediationPath = path.join(wsSessionDir, "a11y-remediation.md");
