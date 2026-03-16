@@ -5,12 +5,6 @@ Runs a WCAG 2.2 AA audit against a live dev server. Classifies findings by task 
 
 ## Usage
 
-Run directly when you want an accessibility audit:
-
-```
-Audit accessibility localhost:3000
-```
-
 ```
 /ws-a11y https://localhost:3000
 ```

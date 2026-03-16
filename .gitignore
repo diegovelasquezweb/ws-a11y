@@ -1,4 +1,1 @@
-node_modules/
-.audit/
-*.log
 .DS_Store
