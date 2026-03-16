@@ -1,0 +1,24 @@
+{
+  "name": "ws-a11y",
+  "version": "0.12.0",
+  "description": "WCAG 2.2 AA accessibility audit skill for AI coding agents — powered by @diegovelasquezweb/a11y-engine",
+  "type": "module",
+  "scripts": {
+    "ws-a11y": "node scripts/audit.mjs",
+    "test": "vitest run",
+    "postinstall": "npx playwright install chromium",
+    "sync": "[ -d ~/.claude/skills/ws-a11y ] && rsync -av --delete --exclude='.git/' --exclude='.github/' --exclude='.audit/' --exclude='node_modules/' . ~/.claude/skills/ws-a11y/ ; [ -d ~/.gemini/skills/ws-a11y ] && rsync -av --delete --exclude='.git/' --exclude='.github/' --exclude='.audit/' --exclude='node_modules/' . ~/.gemini/skills/ws-a11y/ ; [ -d ~/.gemini/antigravity/skills/ws-a11y ] && rsync -av --delete --exclude='.git/' --exclude='.github/' --exclude='.audit/' --exclude='node_modules/' . ~/.gemini/antigravity/skills/ws-a11y/ ; [ -d ~/.cursor/skills/ws-a11y ] && rsync -av --delete --exclude='.git/' --exclude='.github/' --exclude='.audit/' --exclude='node_modules/' . ~/.cursor/skills/ws-a11y/ ; [ -d ~/.codex/skills/ws-a11y ] && rsync -av --delete --exclude='.git/' --exclude='.github/' --exclude='.audit/' --exclude='node_modules/' . ~/.codex/skills/ws-a11y/ ; [ -d ~/.codeium/windsurf/skills/ws-a11y ] && rsync -av --delete --exclude='.git/' --exclude='.github/' --exclude='.audit/' --exclude='node_modules/' . ~/.codeium/windsurf/skills/ws-a11y/ ; true"
+  },
+  "dependencies": {
+    "@diegovelasquezweb/a11y-engine": "0.8.4"
+  },
+  "devDependencies": {
+    "vitest": "^4.0.18"
+  },
+  "packageManager": "pnpm@10.22.0+sha512.bf049efe995b28f527fd2b41ae0474ce29186f7edcb3bf545087bd61fbbebb2bf75362d1307fda09c2d288e1e499787ac12d4fcb617a974718a6051f2eee741c",
+  "pnpm": {
+    "overrides": {
+      "rollup": ">=4.59.0"
+    }
+  }
+}
