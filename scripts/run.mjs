@@ -121,9 +121,6 @@ async function main() {
 
   fs.mkdirSync(AUDIT_DIR, { recursive: true });
 
-  const screenshotsDir = path.join(AUDIT_DIR, "screenshots");
-  fs.rmSync(screenshotsDir, { recursive: true, force: true });
-
   // Resolve --affected-only: narrow routes to those with previous violations
   let effectiveRoutes = args.routes;
   if (args.affectedOnly && !args.routes) {
@@ -131,10 +128,7 @@ async function main() {
     if (fs.existsSync(prevScanPath)) {
       try {
         const prev = JSON.parse(fs.readFileSync(prevScanPath, "utf-8"));
-        const affected = (prev.findings || [])
-          .map((f) => f.area || f.url)
-          .filter(Boolean)
-          .filter((v, i, arr) => arr.indexOf(v) === i);
+        const affected = [...new Set((prev.findings || []).map((f) => f.area || f.url).filter(Boolean))];
         if (affected.length > 0) {
           effectiveRoutes = affected.join(",");
           log.info(`--affected-only: re-scanning ${affected.length} route(s) with previous violations.`);
@@ -147,12 +141,6 @@ async function main() {
     } else {
       log.info("--affected-only: no previous scan found — running full scan.");
     }
-  }
-
-  // Persist project dir in session file for wrappers to reuse
-  const sessionFile = path.join(AUDIT_DIR, "a11y-session.json");
-  if (args.projectDir) {
-    fs.writeFileSync(sessionFile, JSON.stringify({ project_dir: path.resolve(args.projectDir) }), "utf-8");
   }
 
   log.info("Starting accessibility audit pipeline...");
@@ -178,7 +166,6 @@ async function main() {
     framework: args.framework,
     projectDir: args.projectDir,
     skipPatterns: args.skipPatterns,
-    screenshotsDir,
     onProgress: (step, status, extra) => {
       if (status === "running") log.info(`[${step}] running...`);
       if (status === "done") log.success(`[${step}] done${extra ? ` — ${JSON.stringify(extra)}` : ""}`);
@@ -186,12 +173,11 @@ async function main() {
     },
   });
 
-  // Persist findings JSON for wrappers
+  // Persist findings JSON only for --affected-only re-scans
   const findingsPath = path.join(AUDIT_DIR, "a11y-findings.json");
   fs.writeFileSync(findingsPath, JSON.stringify(payload, null, 2), "utf-8");
-  console.log(`FINDINGS_PATH=${findingsPath}`);
 
-  // Generate remediation guide (always)
+  // Generate remediation guide
   const { markdown } = await getRemediationGuide(payload, {
     baseUrl: args.baseUrl,
     target: args.target,
