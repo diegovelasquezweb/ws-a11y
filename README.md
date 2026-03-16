@@ -32,23 +32,5 @@ ws-a11y never modifies code. All fixes are delegated to `ws-dev/frontend` with s
 
 ## Integration with ws-dev/frontend
 
-ws-a11y delegates all fixes to `ws-dev/frontend` via `Task()`. For the integration to work correctly, `ws-dev/frontend` needs to handle two things:
-
-### 1. Receiving iteration_findings
-
-When ws-a11y invokes `Task(ws-dev/frontend)`, it passes findings as `iteration_findings`. The frontend skill should treat these as the sole source of truth for that iteration — not re-read the full remediation guide.
-
-Each finding includes: `rule_id`, `title`, `severity`, `selector`, `fix_description`, `fix_code`, `fix_code_lang`, `file_search_pattern`, `ownership_status`, `guardrails`, and `verification_command`.
-
-### 2. Accessing engine knowledge
-
-The intelligence data (`intelligence.json`, `code-patterns.json`) that `ws-dev/frontend` uses for proactive accessibility checks **no longer lives at** `~/.claude/skills/ws-a11y/assets/`. It is now internal to the engine.
-
-To access it, run:
-
-```bash
-node ~/.claude/skills/ws-a11y/scripts/get-knowledge.mjs
-```
-
-This prints the full engine knowledge payload to stdout — same data, engine-sourced.
+ws-a11y delegates all fixes to `ws-dev/frontend` via `Task()`, passing the `remediation.md` path as context. `ws-dev/frontend` reads the remediation guide to understand what to fix, implements the changes, and returns results to ws-a11y for re-audit.
 
