@@ -1,7 +1,7 @@
 # ws-a11y
 
 
-Runs a WCAG 2.2 AA audit (axe-core DOM scan + source code pattern scan) against a live dev server. Classifies findings by task scope, delegates all fixes to `ws-dev/frontend`, and re-audits after each fix cycle. Powered by [@diegovelasquezweb/a11y-engine](https://www.npmjs.com/package/@diegovelasquezweb/a11y-engine).
+Runs a WCAG 2.2 AA audit against a live dev server. Classifies findings by task scope, delegates all fixes to `ws-dev/frontend`, and re-audits after each fix cycle. Powered by [@diegovelasquezweb/a11y-engine](https://www.npmjs.com/package/@diegovelasquezweb/a11y-engine).
 
 ## Usage
 
