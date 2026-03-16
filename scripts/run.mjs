@@ -183,7 +183,17 @@ async function main() {
     target: args.target,
     patternFindings: payload.patternFindings || null,
   });
-  const remediationPath = path.join(AUDIT_DIR, "remediation.md");
+
+  // Write remediation.md to .ws-session/ in the project (for ws-dev/frontend to consume).
+  // Falls back to .audit/ inside the skill if no --project-dir was provided.
+  let remediationPath;
+  if (args.projectDir) {
+    const wsSessionDir = path.join(path.resolve(args.projectDir), ".ws-session");
+    fs.mkdirSync(wsSessionDir, { recursive: true });
+    remediationPath = path.join(wsSessionDir, "a11y-remediation.md");
+  } else {
+    remediationPath = path.join(AUDIT_DIR, "remediation.md");
+  }
   fs.writeFileSync(remediationPath, markdown, "utf-8");
   console.log(`REMEDIATION_PATH=${remediationPath}`);
 
