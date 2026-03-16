@@ -5,7 +5,7 @@ Runs a WCAG 2.2 AA audit (axe-core DOM scan + source code pattern scan) against 
 
 ## Usage
 
-Invoked by ws-orchestrator after every frontend task, or called directly:
+Run directly when you want an accessibility audit:
 
 ```
 Audit accessibility localhost:3000
@@ -18,9 +18,8 @@ Audit accessibility localhost:3000
 ## How It Fits
 
 ```
-ws-orchestrator
-    └── Task(ws-a11y)               ← audit + classify + delegate
-            └── Task(ws-dev/frontend)    ← applies fixes
+Task(ws-a11y)               ← audit + classify + delegate
+    └── Task(ws-dev/frontend)    ← applies fixes
 ```
 
 ws-a11y never modifies code. All fixes are delegated to `ws-dev/frontend` with structured findings as input.
