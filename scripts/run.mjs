@@ -21,7 +21,7 @@ const log = {
 
 function printUsage() {
   log.info(`Usage:
-  node scripts/audit.mjs --base-url <url> [options]
+  node scripts/run.mjs --base-url <url> [options]
 
 Targeting & Scope:
   --base-url <url>        (Required) The target website to audit.
@@ -68,7 +68,7 @@ function parseArgs(argv) {
   const baseUrl = getArgValue("base-url");
   if (!baseUrl) {
     log.error("Missing required argument: --base-url");
-    log.info("Usage: node scripts/audit.mjs --base-url <url> [options]");
+    log.info("Usage: node scripts/run.mjs --base-url <url> [options]");
     process.exit(1);
   }
 

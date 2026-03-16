@@ -337,10 +337,9 @@ The source scanner checks your **entire codebase** for issues axe-core cannot de
 1. **Yes** — run source code pattern scan
 2. **No thanks** — skip
 
-If **Yes**, run in order:
+If **Yes**, run:
 ```bash
-node $SKILL_DIR/scripts/scan-source.mjs --project-dir <path> [--framework <val>]
-node $SKILL_DIR/scripts/remediation.mjs --output <REMEDIATION_PATH> --base-url <URL>
+node $SKILL_DIR/scripts/run.mjs --base-url <URL> --project-dir <path> [--framework <val>]
 ```
 
 Present new findings from "Source Code Pattern Findings" section, grouped by severity.
