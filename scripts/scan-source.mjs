@@ -1,10 +1,9 @@
 /**
- * @file source-scanner.mjs
- * @description CLI wrapper for @diegovelasquezweb/a11y-engine source pattern scanner.
- * Scans a project's source code for accessibility issues not detectable by axe-core at runtime.
+ * @file scan-source.mjs
+ * @description Scans a project's source code for accessibility issues not detectable by axe-core at runtime.
  *
  * Usage (from SKILL.md Step 3):
- *   node $SKILL_DIR/scripts/source-scanner.mjs --project-dir <path> [--framework <val>]
+ *   node $SKILL_DIR/scripts/scan-source.mjs --project-dir <path> [--framework <val>]
  */
 
 import path from "node:path";

@@ -1,11 +1,10 @@
 /**
- * @file md.mjs
- * @description CLI wrapper for @diegovelasquezweb/a11y-engine Markdown remediation guide generator.
- * Reads the findings payload from .audit/ and (re)generates the remediation.md guide.
- * Called after source-scanner.mjs in SKILL.md Step 6.6 to include pattern findings.
+ * @file remediation.mjs
+ * @description Regenerates the remediation.md guide from the findings payload.
+ * Called after scan-source.mjs to include source pattern findings in the guide.
  *
  * Usage (from SKILL.md Step 3):
- *   node $SKILL_DIR/scripts/md.mjs --output <REMEDIATION_PATH> --base-url <URL>
+ *   node $SKILL_DIR/scripts/remediation.mjs --output <REMEDIATION_PATH> --base-url <URL>
  */
 
 import path from "node:path";
