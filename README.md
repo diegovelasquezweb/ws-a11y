@@ -1,6 +1,5 @@
 # ws-a11y
 
-
 Runs a WCAG 2.2 AA audit against a live dev server. Classifies findings by task scope, delegates all fixes to `ws-dev/frontend`, and re-audits after each fix cycle. Powered by [@diegovelasquezweb/a11y-engine](https://www.npmjs.com/package/@diegovelasquezweb/a11y-engine).
 
 ## Usage
@@ -12,19 +11,12 @@ Runs a WCAG 2.2 AA audit against a live dev server. Classifies findings by task 
 ## How It Fits
 
 ```
-Task(ws-a11y)               ← audit + classify + delegate
-    └── Task(ws-dev/frontend)    ← applies fixes
+Task(ws-a11y)
+    └── Task(ws-dev/frontend)
 ```
 
-ws-a11y never modifies code. All fixes are delegated to `ws-dev/frontend` with structured findings as input.
-
-## Deliverables
-
-| Format | When |
-| :----- | :--- |
-| Remediation guide (`.md`) | Always — generated after every audit |
+ws-a11y never modifies code. All fixes are delegated to `ws-dev/frontend`.
 
 ## Integration with ws-dev/frontend
 
-ws-a11y delegates all fixes to `ws-dev/frontend` via `Task()`. The remediation guide is written to `.ws-session/a11y-remediation.md` — the same directory all ws-* skills use for session state. `ws-dev/frontend` reads it from there to understand what to fix, implements the changes, and returns results to ws-a11y for re-audit.
-
+The remediation guide is written to `.ws-session/a11y-remediation.md` in the project root after every audit. `ws-dev/frontend` reads it from there to understand what to fix.
